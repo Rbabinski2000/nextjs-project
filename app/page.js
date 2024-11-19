@@ -22,7 +22,17 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
+        <p>Szczegóły zmian:
+          flex-1: Użycie flex-1 w main sprawia, że główny obszar (zawartość) zajmuje całą dostępną przestrzeń między aside a footer.
+          h-[10vh]: footer ma teraz stałą wysokość 10% okna przeglądarki, co zapewnia jego stałą wysokość niezależnie od treści.
+          h-screen: Cały layout (div z flex flex-col h-screen) ma ustawioną wysokość na 100% ekranu, co pozwala na trzymanie stopki na dole, nawet jeśli zawartość nie wypełnia całej strony.
+          Rezultat:
+          aside: Zawsze po lewej stronie, zajmujący 1/4 szerokości ekranu.
+          footer: Zawsze na dole strony, o wysokości 10% okna.
+          Główna zawartość: Zajmuje resztę dostępnej przestrzeni między aside a footer.
 
+
+          </p>
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
@@ -49,6 +59,7 @@ export default function Home() {
           </a>
         </div>
       </main>
+
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
