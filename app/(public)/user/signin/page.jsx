@@ -6,11 +6,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignInForm() {
+  //console.log(process.env)
   const auth = getAuth();
   //const params = useSearchParams();
   const router = useRouter();
   //const returnUrl = params.get("returnUrl");
-  
+  console.log(process)
   const [error, setError] = useState(""); // Stan do przechowywania błędów
 
   const onSubmit = (e) => {
@@ -18,6 +19,7 @@ export default function SignInForm() {
     const email = e.target["email"].value;
     const password = e.target["password"].value;
 
+    
     setError(""); // Czyszczenie błędu przed próbą logowania
 
     setPersistence(auth, browserSessionPersistence)

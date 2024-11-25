@@ -2,40 +2,39 @@
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat/app"
 import { getAnalytics } from "firebase/analytics";
+//import "./envConfig";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-
+//const pdir=process.cwd()
+  //loadEnvConfig(pdir)
 // Your web app's Firebase configuration
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     
-  apiKey: "AIzaSyDjx1YdVT_yuNSGi-efYeiOvW6PC6RBBjI",
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
 
-  authDomain: "project-database-c809e.firebaseapp.com",
+  authDomain: process.env.NEXT_PUBLIC_authDomain,
 
-  projectId: "project-database-c809e",
+  projectId: process.env.NEXT_PUBLIC_projectId,
 
-  storageBucket: "project-database-c809e.firebasestorage.app",
+  storageBucket: process.env.NEXT_PUBLIC_storageBucket,
 
-  messagingSenderId: "293968408165",
+  messagingSenderId:process.env.NEXT_PUBLIC_messagingSenderId,
 
-  appId: "1:293968408165:web:bba0e9a54168c615c7608c",
+  appId: process.env.NEXT_PUBLIC_appId,
 
-  measurementId: "G-4VHX3732LG"
+  measurementId: process.env.NEXT_PUBLIC_measurementId
 
 };
 
 
 // Initialize Firebase
-if (!firebase.app.length) {
-    console.log(process.env)
-    firebase.initializeApp(firebaseConfig)
-  }
-  console.log(process.env)
+  //console.log(process)
 const app = initializeApp(firebaseConfig);
 
 //const analytics = getAnalytics(app);
