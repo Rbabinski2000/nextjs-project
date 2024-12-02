@@ -1,17 +1,16 @@
 'use client'
-import firebase from "../../../lib/firebase";
-import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from "firebase/auth";
-import { getAuth } from 'firebase/auth';
+
+import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence, signOut } from "firebase/auth";
+import { auth } from "@/app/lib/firebase"
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignInForm() {
   //console.log(process.env)
-  const auth = getAuth();
-  //const params = useSearchParams();
+  
+  const params = useSearchParams();
   const router = useRouter();
-  //const returnUrl = params.get("returnUrl");
-  console.log(process)
+  const returnUrl = params.get("returnUrl");
   const [error, setError] = useState(""); // Stan do przechowywania błędów
 
   const onSubmit = (e) => {
@@ -26,7 +25,11 @@ export default function SignInForm() {
       .then(() => {
         signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
-            router.push("/"); // Przekierowanie po sukcesie
+            if(userCredential.user.emailVerified){
+              router.push("/user/verify")
+            }else{
+              router.push(returnUrl || "/"); // Przekierowanie po sukcesie
+            }
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -50,7 +53,7 @@ export default function SignInForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-50 dark:text-gray-800" noValidate>
+    <form onSubmit={onSubmit} className="flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-50 dark:text-gray-800" noValidate>
       <div className="mb-8 text-center">
         <h1 className="my-3 text-4xl font-bold">Sign in</h1>
         <p className="text-sm dark:text-gray-600">Sign in to access your account</p>

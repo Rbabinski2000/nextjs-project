@@ -1,4 +1,7 @@
-import { useState } from "react"
+'use client'
+import { useState,createContext,useEffect,useContext } from "react"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "./firebase"
 
 const AuthContext = createContext()
 
