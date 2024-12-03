@@ -4,22 +4,37 @@ import { updateProfile,reload } from "firebase/auth";
 import { useAuth } from "@/app/lib/AuthContext";
 import { useRouter } from "next/navigation";
 import Image from 'next/image'
+import { DbCollectionGet,DbCollectionSet } from "./fireCollection";
+
+import { db } from '@/app/lib/firebase'
+import { collection, addDoc, setDoc, doc, getDoc } from 'firebase/firestore'
 
 function ProfileForm() {
   const { user } = useAuth();
   const [error, setError] = useState(""); // Stan obsługujący błędy
   const router=useRouter();
+
   const [formData, setFormData] = useState({
     displayName: user?.displayName || "",
     email: user?.email || "",
     photoURL: user?.photoURL || "",
   });
+  const [addressData, setAddressData] = useState({
+    city:"",
+    street:"",
+    zipCode:""
+  });
 
+
+  // const docA=doc(db,"users","8gvxS1VytSQfUXgHzPG1");
+  // const docSnap=getDoc(docA)
+  // console.log(docSnap)
   const onSubmit = (event) => {
     event.preventDefault();
 
     
-    
+    const test=DbCollectionGet(user)
+    console.log(addressData)
     updateProfile(user, {
       displayName: formData.displayName,
       photoURL: formData.photoURL,
@@ -37,6 +52,13 @@ function ProfileForm() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const handleChangeAddress = (event) => {
+    const { name, value } = event.target;
+    setAddressData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -87,6 +109,46 @@ function ProfileForm() {
             name="photoURL"
             value={formData.photoURL}
             onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+        <h1>Address</h1>
+        <div>
+          <label htmlFor="city" className="block mb-1 text-sm font-medium text-gray-700">
+            City
+          </label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            value={addressData.city}
+            onChange={handleChangeAddress}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+        <div>
+          <label htmlFor="street" className="block mb-1 text-sm font-medium text-gray-700">
+            Street
+          </label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            value={addressData.street}
+            onChange={handleChangeAddress}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+        <div>
+          <label htmlFor="zipCode" className="block mb-1 text-sm font-medium text-gray-700">
+            zipCode
+          </label>
+          <input
+            type="text"
+            id="zipCode"
+            name="zipCode"
+            value={addressData.zipCode}
+            onChange={handleChangeAddress}
             className="w-full px-3 py-2 border rounded-md"
           />
         </div>
