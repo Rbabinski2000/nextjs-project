@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
                     <h2 className="text-sm font-semibold tracking-widest uppercase dark:text-gray-600">Getting Started</h2>
                     <div className="flex flex-col space-y-1">
                       <Link rel="noopener noreferrer" href="/user/profile">Profile</Link>
-                      <a rel="noopener noreferrer" href="#">Plugins</a>
+                      <Link rel="noopener noreferrer" href="/user/articles">Articles</Link>
                       <a rel="noopener noreferrer" href="#">Migrations</a>
                       <a rel="noopener noreferrer" href="#">Appearance</a>
                       <a rel="noopener noreferrer" href="#">Mamba UI</a>

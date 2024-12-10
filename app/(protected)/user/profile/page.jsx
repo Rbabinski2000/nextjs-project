@@ -1,30 +1,45 @@
 'use client'
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { updateProfile,reload } from "firebase/auth";
 import { useAuth } from "@/app/lib/AuthContext";
 import { useRouter } from "next/navigation";
 import Image from 'next/image'
-import { DbCollectionGet,DbCollectionSet } from "./fireCollection";
+import { DbCollectionGet,DbCollectionSet } from "../../fireCollection";
 
-import { db } from '@/app/lib/firebase'
-import { collection, addDoc, setDoc, doc, getDoc } from 'firebase/firestore'
+
 
 function ProfileForm() {
   const { user } = useAuth();
   const [error, setError] = useState(""); // Stan obsługujący błędy
   const router=useRouter();
-
+  DbCollectionGet(user)
   const [formData, setFormData] = useState({
     displayName: user?.displayName || "",
     email: user?.email || "",
     photoURL: user?.photoURL || "",
   });
+  
   const [addressData, setAddressData] = useState({
     city:"",
     street:"",
     zipCode:""
   });
 
+  useEffect(() => {
+    if (user) {
+      DbCollectionGet(user)
+        .then(res => {
+          setAddressData({
+            city: res?.city || "",
+            street: res?.street || "",
+            zipCode: res?.zipCode || ""
+          });
+        })
+        .catch(err => {
+          console.error("Error fetching address data:", err);
+        });
+    }
+  }, [user]);
 
   // const docA=doc(db,"users","8gvxS1VytSQfUXgHzPG1");
   // const docSnap=getDoc(docA)
@@ -33,8 +48,8 @@ function ProfileForm() {
     event.preventDefault();
 
     
-    const test=DbCollectionGet(user)
-    console.log(addressData)
+    
+    DbCollectionSet(addressData,user)
     updateProfile(user, {
       displayName: formData.displayName,
       photoURL: formData.photoURL,
