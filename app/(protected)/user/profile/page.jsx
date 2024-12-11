@@ -3,7 +3,7 @@ import { useState ,useEffect} from "react";
 import { updateProfile,reload } from "firebase/auth";
 import { useAuth } from "@/app/lib/AuthContext";
 import { useRouter } from "next/navigation";
-import Image from 'next/image'
+//import Image from 'next/image'
 import { DbCollectionGet,DbCollectionSet } from "../../fireCollection";
 
 
@@ -12,7 +12,6 @@ function ProfileForm() {
   const { user } = useAuth();
   const [error, setError] = useState(""); // Stan obsługujący błędy
   const router=useRouter();
-  DbCollectionGet(user)
   const [formData, setFormData] = useState({
     displayName: user?.displayName || "",
     email: user?.email || "",

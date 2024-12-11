@@ -26,7 +26,7 @@ async function DbCollectionGet(user){
     let data;
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data().address);
-      //data=docSnap.data().address;
+      data=docSnap.data().address;
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
@@ -36,12 +36,13 @@ async function DbCollectionGet(user){
 }
 async function DbCollectionArtGet(user){
   const articlesRef=collection(db,"articles");
+  const userRef=doc(db,"users",user?.uid)
   //console.log(articlesRef)
   let tab=[];
-  const q=query(articlesRef,where("user","!=",""))
+  const q=query(articlesRef,where("user","==",userRef))
 
   const querySnapshot = await getDocs(q);
-  
+  //console.log(userRef)
   querySnapshot.forEach((doc) => {
     //console.log("w srodku snapa",doc)
     // doc.data() is never undefined for query doc snapshots
