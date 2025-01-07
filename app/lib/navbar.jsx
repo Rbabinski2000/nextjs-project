@@ -5,7 +5,7 @@ import { useAuth } from "./AuthContext";
 export default function Navbar() {
     let { user } = useAuth();
     return (
-        <header className="fixed top-0 h-24 bg-gray-800 text-gray-100 z-50 "style={{ width: '89%' }}>
+        <header className="fixed top-0 h-[65px] bg-gray-800 text-gray-100 z-50 "style={{ width: '89%' }}>
             <div className="flex items-center justify-between h-full px-4">
                 {/* Logo */}
                 <Link rel="noopener noreferrer" href="/" aria-label="Back to homepage" className="flex items-center p-2">

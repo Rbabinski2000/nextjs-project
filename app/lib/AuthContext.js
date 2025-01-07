@@ -25,3 +25,17 @@ export const AuthProvider = ({ children }) => {
 }
 
 export const useAuth = () => useContext(AuthContext)
+
+const CalendarContext=createContext();
+
+export const CalendarProvider=({children})=>{
+  const[currDate,setCurrDate]=useState(null)
+
+  return (
+    <CalendarContext.Provider value={{currDate}}>
+      {children}
+    </CalendarContext.Provider>
+  )
+}
+
+export const useCall=()=>useContext(CalendarContext)
