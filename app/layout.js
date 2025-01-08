@@ -33,7 +33,6 @@ export default function RootLayout({ children }) {
                       <Link rel="noopener noreferrer" href="/user/profile">Profile</Link>
                       <Link rel="noopener noreferrer" href="/user/articles">Articles</Link>
                       <Link rel="noopener noreferrer" href="/calendar">Calendar</Link>
-                      <Link rel="noopener noreferrer" href="/calendar/components">Test</Link>
                     </div>
                   </div>
                 </nav>

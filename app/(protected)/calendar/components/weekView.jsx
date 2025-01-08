@@ -23,7 +23,7 @@ const WeekSchedule = () => {
   const[tableVal,setTableVal]=useState([[]])
   //console.log(provDate)
   // Funkcja do zarządzania zajęciami
-  const handleEventUpdate = (day, hour, event) => {
+  const handleEventUpdate = (day, hour, event,data) => {
     setSchedule((prev) => ({
       ...prev,
       [day]: {
@@ -32,6 +32,8 @@ const WeekSchedule = () => {
       },
     }));
     setSelectedEvent(null);
+    DbCollectionSchedSet(user,data,event)
+    getData()
   };
 
   useEffect(() => {
@@ -52,11 +54,16 @@ const WeekSchedule = () => {
     //console.log(fullWeekend[0])
     DbCollectionSchedGet(user,fullWeekend[0],fullWeekend[6])
     .then((data) => {
-      //console.log(data)
-      setEvents(data); // Przypisz dane do stanu
+      
+      //console.log(data[0][0])
+      for(let i=0;i<data[0].length;i++){
+        data[0][i].id=data[1][i];
+      }
+      console.log(data[0])
+      setEvents(data[0]); // Przypisz dane do stanu
       setLoading(false); // Ustaw zakończenie ładowania
       
-      fillTable(data);
+      fillTable(data[0]);
       
     })
     .catch((err) => {
@@ -98,6 +105,7 @@ const WeekSchedule = () => {
 
       //console.log(hour)
       tab[day][hour]=event;
+      //console.log(event)
       //console.log(tab)
     })
     //console.log(tab[1][3])
@@ -138,7 +146,7 @@ const WeekSchedule = () => {
                     setSelectedEvent({
                       day,
                       hour,
-                      event: schedule[day.getDay()+6%7]?.[hour] || "",
+                      event: tableVal[day.getDay()+6%7]?.[hour-8] || "",
                     })
                   }
                 >
@@ -165,7 +173,6 @@ const WeekSchedule = () => {
 
 const EventForm = ({ event, onClose, onSave }) => {
   const [value, setValue] = useState(event.event);
-  const {user}=useAuth();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-80">
@@ -198,8 +205,8 @@ const EventForm = ({ event, onClose, onSave }) => {
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={() => {
-                DbCollectionSchedSet(user,event,value)
-                onSave(event.day, event.hour, value); // Zapisanie/edycja
+                
+                onSave(event.day, event.hour, value,event); // Zapisanie/edycja
                 onClose();
               }}
             >

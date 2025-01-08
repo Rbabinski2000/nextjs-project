@@ -60,6 +60,8 @@ async function DbCollectionSchedGet(user,starting,ending){
   const userRef=doc(db,"users",user?.uid)
   //console.log(articlesRef)
   let tab=[];
+  let tab1=[];
+  
   const start=Timestamp.fromDate(starting)
   const end=Timestamp.fromDate(ending)
   const q=query(articlesRef,where("user","==",userRef),where("Date",">=",start),where("Date","<=",end))
@@ -67,12 +69,17 @@ async function DbCollectionSchedGet(user,starting,ending){
   const querySnapshot = await getDocs(q);
   
   querySnapshot.forEach((doc) => {
-    //console.log("w srodku snapa",doc.data())
+    //console.log("w srodku snapa",doc.id)
     // doc.data() is never undefined for query doc snapshots
-    tab[tab.length]=doc.data();
+    //tab[tab.length]=doc.data();
+    tab[tab.length]=doc.data()
+    tab1[tab1.length]=doc.id
+     
     //console.log(doc.id, " => ", doc.data());
   });
-  return tab
+  const main=[tab,tab1]
+  return main
+  return tab;
 
 }
 
@@ -82,6 +89,7 @@ async function DbCollectionSchedSet(user,event,value){
   temp.setMinutes(0);
   temp.setSeconds(0);
   temp.setMilliseconds(0);
+  console.log(event)
   try {
     const userRef=doc(db,"users",user?.uid)
     //console.log(userRef)
@@ -91,7 +99,7 @@ async function DbCollectionSchedSet(user,event,value){
       user:userRef,
       Date:Timestamp.fromDate(temp)
     });
-    console.log("Document written with ID: ", docRef);
+    //console.log("Document written with ID: ", docRef);
   } catch (e) {
     console.error("Error adding document: ", e);
   }
