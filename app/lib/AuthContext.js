@@ -29,10 +29,11 @@ export const useAuth = () => useContext(AuthContext)
 const CalendarContext=createContext();
 
 export const CalendarProvider=({children})=>{
-  const[currDate,setCurrDate]=useState(null)
+  const[currDate,setCurrDate]=useState(new Date(Date.now()))
+  const[provDate,setProvDate]=useState(new Date(Date.now()))
 
   return (
-    <CalendarContext.Provider value={{currDate}}>
+    <CalendarContext.Provider value={{currDate,setCurrDate,provDate,setProvDate}}>
       {children}
     </CalendarContext.Provider>
   )

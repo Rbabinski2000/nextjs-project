@@ -1,7 +1,8 @@
 import { db } from '@/app/lib/firebase'
 import { collection, addDoc, setDoc, doc, getDoc} from 'firebase/firestore'
 import { query, where,getDocs } from "firebase/firestore";
-
+import { Firestore } from 'firebase/firestore';
+import { Timestamp} from "@firebase/firestore";
 
 
 async function DbCollectionSet(addressData,user){
@@ -25,7 +26,7 @@ async function DbCollectionGet(user){
     const docSnap=await getDoc(doc(db,"users",user?.uid))
     let data;
     if (docSnap.exists()) {
-      //console.log("Document data:", docSnap.data().address);
+      console.log("Document data:", docSnap.data());
       data=docSnap.data().address;
     } else {
       // docSnap.data() will be undefined in this case
@@ -52,4 +53,26 @@ async function DbCollectionArtGet(user){
   
   return tab
 }
-export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet}
+
+async function DbCollectionSchedGet(user,starting,ending){
+  //console.log(starting)
+  const articlesRef=collection(db,"schedules");
+  const userRef=doc(db,"users",user?.uid)
+  //console.log(articlesRef)
+  let tab=[];
+  const start=Timestamp.fromDate(starting)
+  const end=Timestamp.fromDate(ending)
+  const q=query(articlesRef,where("user","==",userRef),where("Date",">=",start),where("Date","<=",end))
+  
+  const querySnapshot = await getDocs(q);
+  
+  querySnapshot.forEach((doc) => {
+    //console.log("w srodku snapa",doc.data())
+    // doc.data() is never undefined for query doc snapshots
+    tab[tab.length]=doc.data();
+    //console.log(doc.id, " => ", doc.data());
+  });
+  return tab
+
+}
+export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet,DbCollectionSchedGet}
