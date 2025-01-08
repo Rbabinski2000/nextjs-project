@@ -1,27 +1,26 @@
 'use client'
-import { useState ,useEffect} from "react";
-import { updateProfile,reload } from "firebase/auth";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { updateProfile } from "firebase/auth";
 import { useAuth } from "@/app/lib/AuthContext";
 import { useRouter } from "next/navigation";
-//import Image from 'next/image'
-import { DbCollectionGet,DbCollectionSet } from "../../fireCollection";
-
-
+import { DbCollectionGet, DbCollectionSet } from "../../fireCollection";
 
 function ProfileForm() {
   const { user } = useAuth();
-  const [error, setError] = useState(""); // Stan obsługujący błędy
-  const router=useRouter();
+  const [error, setError] = useState(""); // State to handle errors
+  const router = useRouter();
+  const [profileImage, setProfileImage] = useState(user?.photoURL || ""); // State for displayed profile image
   const [formData, setFormData] = useState({
     displayName: user?.displayName || "",
     email: user?.email || "",
     photoURL: user?.photoURL || "",
   });
-  
+
   const [addressData, setAddressData] = useState({
-    city:"",
-    street:"",
-    zipCode:""
+    city: "",
+    street: "",
+    zipCode: ""
   });
 
   useEffect(() => {
@@ -40,27 +39,24 @@ function ProfileForm() {
     }
   }, [user]);
 
-  // const docA=doc(db,"users","8gvxS1VytSQfUXgHzPG1");
-  // const docSnap=getDoc(docA)
-  // console.log(docSnap)
   const onSubmit = (event) => {
     event.preventDefault();
 
-    
-    
-    DbCollectionSet(addressData,user)
-    updateProfile(user, {
-      displayName: formData.displayName,
-      photoURL: formData.photoURL,
-    })
+    DbCollectionSet(addressData, user)
+      .then(() => {
+        return updateProfile(user, {
+          displayName: formData.displayName,
+          photoURL: formData.photoURL,
+        });
+      })
       .then(() => {
         console.log("Profile updated");
-        router.refresh()
+        setProfileImage(formData.photoURL); // Update displayed profile image
+        router.refresh();
       })
       .catch((error) => {
         setError(error.message);
       });
-      
   };
 
   const handleChange = (event) => {
@@ -69,7 +65,13 @@ function ProfileForm() {
       ...prevState,
       [name]: value,
     }));
+
+    // Update the profile image preview if photoURL changes
+    if (name === "photoURL") {
+      setProfileImage(value);
+    }
   };
+
   const handleChangeAddress = (event) => {
     const { name, value } = event.target;
     setAddressData((prevState) => ({
@@ -87,6 +89,23 @@ function ProfileForm() {
         </div>
       )}
       <form onSubmit={onSubmit} className="space-y-4">
+        {/* Display current profile image */}
+        <div className="flex justify-center mb-4">
+          {profileImage ? (
+            <Image
+              src={profileImage}
+              alt="Profile Picture"
+              width={100}
+              height={100}
+              className="rounded-full"
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+              <span className="text-gray-500">No Photo</span>
+            </div>
+          )}
+        </div>
+
         <div>
           <label htmlFor="displayName" className="block mb-1 text-sm font-medium text-gray-700">
             Display Name
@@ -155,7 +174,7 @@ function ProfileForm() {
         </div>
         <div>
           <label htmlFor="zipCode" className="block mb-1 text-sm font-medium text-gray-700">
-            zipCode
+            Zip Code
           </label>
           <input
             type="text"

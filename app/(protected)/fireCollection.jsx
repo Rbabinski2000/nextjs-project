@@ -75,4 +75,26 @@ async function DbCollectionSchedGet(user,starting,ending){
   return tab
 
 }
-export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet,DbCollectionSchedGet}
+
+async function DbCollectionSchedSet(user,event,value){
+  let temp=new Date(event.day);
+  temp.setHours(event.hour);
+  temp.setMinutes(0);
+  temp.setSeconds(0);
+  temp.setMilliseconds(0);
+  try {
+    const userRef=doc(db,"users",user?.uid)
+    //console.log(userRef)
+    const docRef =addDoc(collection(db, "schedules"), {
+      Title:value,
+      Content:value,
+      user:userRef,
+      Date:Timestamp.fromDate(temp)
+    });
+    console.log("Document written with ID: ", docRef);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+
+}
+export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet,DbCollectionSchedGet,DbCollectionSchedSet}

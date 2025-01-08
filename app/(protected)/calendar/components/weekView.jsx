@@ -2,7 +2,7 @@
 import React, { use } from "react";
 import { useState,useEffect } from "react";
 import { useCall } from "@/app/lib/AuthContext";
-import { DbCollectionSchedGet} from "@/app/(protected)/fireCollection";
+import { DbCollectionSchedGet, DbCollectionSchedSet} from "@/app/(protected)/fireCollection";
 import { useAuth } from "@/app/lib/AuthContext";
 
 
@@ -45,7 +45,7 @@ const WeekSchedule = () => {
     }, [fullWeekend]);
   useEffect(() => {
     
-    console.log(tableVal)
+    //console.log(tableVal)
     }, [tableVal]);
 
   function getData(){
@@ -103,7 +103,7 @@ const WeekSchedule = () => {
     //console.log(tab[1][3])
     setTableVal(tab)
   }
-
+  
   return (
     <div className="flex flex-col items-center p-4 w-full">
       <h1 className="text-2xl font-bold mb-6">Weekly Schedule</h1>
@@ -132,13 +132,13 @@ const WeekSchedule = () => {
               {/* Pola dla każdego dnia */}
               {fullWeekend.map((day) => (
                 <td
-                  key={`${(day.getDay() + 6) % 7}-${day.getHours()-8}`}
+                  key={`${(day.getDay() + 6) % 7}-${hour}`}
                   className="border border-gray-300 p-2 text-sm cursor-pointer bg-gray-50 hover:bg-blue-100"
                   onClick={() =>
                     setSelectedEvent({
                       day,
                       hour,
-                      event: schedule[day]?.[hour] || "",
+                      event: schedule[day.getDay()+6%7]?.[hour] || "",
                     })
                   }
                 >
@@ -165,12 +165,12 @@ const WeekSchedule = () => {
 
 const EventForm = ({ event, onClose, onSave }) => {
   const [value, setValue] = useState(event.event);
-
+  const {user}=useAuth();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-80">
         <h2 className="text-lg font-semibold mb-4">
-          {event.event ? "Edit Event" : "Add Event"} - {event.day} {event.hour}:00
+          {event.event ? "Edit Event" : "Add Event"} - {event.day.getDay()} {event.hour}:00
         </h2>
         <textarea
           className="w-full p-2 border rounded mb-4"
@@ -198,6 +198,7 @@ const EventForm = ({ event, onClose, onSave }) => {
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={() => {
+                DbCollectionSchedSet(user,event,value)
                 onSave(event.day, event.hour, value); // Zapisanie/edycja
                 onClose();
               }}
