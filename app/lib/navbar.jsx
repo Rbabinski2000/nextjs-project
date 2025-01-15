@@ -17,7 +17,7 @@ export default function Navbar() {
                 
                 {/* Links */}
                 <ul className="hidden lg:flex space-x-4">
-                    <li><Link href="#" className="hover:text-violet-600">Home</Link></li>
+                    <li><Link href="/" className="hover:text-violet-600">Home</Link></li>
                     <li><Link href="#" className="hover:text-violet-600">About</Link></li>
                     <li><Link href="#" className="hover:text-violet-600">Contact</Link></li>
                     <li><Link href="#" className="hover:text-violet-600">Blog</Link></li>

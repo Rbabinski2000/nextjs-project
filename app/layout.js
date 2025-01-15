@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
               <div className="flex flex-col w-full">
                 <Navbar />
                 {/* Główna zawartość z marginesem */}
-                <div className="flex-1 h-full overflow-y-auto mt-[90px]">
+                <div className="flex-1 h-full overflow-y-auto">
                   {children}
 
                 </div>

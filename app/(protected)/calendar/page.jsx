@@ -21,10 +21,10 @@ function CalendarView(){
 
 
     return (
-        <div className="flex flex-col w-full h-full justify-betwee">
+        <div className="flex flex-col w-full h-full justify-between mt-24">
             <div className=" flex justify-center mb-4">
-        <button onClick={() => setIsMonth(false)} className="mx-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Tydzień</button>
-        <button onClick={() => setIsMonth(true)}  className="mx-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Miesiąc</button>
+                <button onClick={() => setIsMonth(false)} className="mx-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Tydzień</button>
+                <button onClick={() => setIsMonth(true)}  className="mx-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Miesiąc</button>
             </div>
         <div className="flex justify-center w-full flex-grow">
         {isMonth

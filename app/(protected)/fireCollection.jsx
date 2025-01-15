@@ -1,5 +1,5 @@
 import { db } from '@/app/lib/firebase'
-import { collection, addDoc, setDoc, doc, getDoc} from 'firebase/firestore'
+import { collection, addDoc, setDoc, doc, getDoc,deleteDoc} from 'firebase/firestore'
 import { query, where,getDocs } from "firebase/firestore";
 import { Firestore } from 'firebase/firestore';
 import { Timestamp} from "@firebase/firestore";
@@ -90,19 +90,52 @@ async function DbCollectionSchedSet(user,event,value){
   temp.setSeconds(0);
   temp.setMilliseconds(0);
   console.log(event)
-  try {
-    const userRef=doc(db,"users",user?.uid)
-    //console.log(userRef)
-    const docRef =addDoc(collection(db, "schedules"), {
-      Title:value,
-      Content:value,
-      user:userRef,
-      Date:Timestamp.fromDate(temp)
-    });
-    //console.log("Document written with ID: ", docRef);
-  } catch (e) {
-    console.error("Error adding document: ", e);
+  if(event.event == ""){
+    try {
+      const userRef=doc(db,"users",user?.uid)
+      //console.log(userRef)
+      const docRef =addDoc(collection(db, "schedules"), {
+        Title:value,
+        Content:value,
+        user:userRef,
+        Date:Timestamp.fromDate(temp)
+      });
+      //console.log("Document written with ID: ", docRef);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }else{
+    try {
+      const id=event.event.id
+      const userRef=doc(db,"users",user?.uid)
+      //console.log(userRef)
+      const docRef =setDoc(doc(db, "schedules",id), {
+        Title:value,
+        Content:value,
+        user:userRef,
+        Date:Timestamp.fromDate(temp)
+      });
+      //console.log("Document written with ID: ", docRef);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
 }
-export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet,DbCollectionSchedGet,DbCollectionSchedSet}
+
+function DbCollectionSchedDel(user,event){
+  
+  try {
+    console.log("first")
+    const id=event.event.id
+    const userRef=doc(db,"users",user?.uid)
+    //console.log(userRef)
+    deleteDoc(doc(db, "schedules",id))
+     
+    //console.log("Document written with ID: ", docRef);
+  } catch {
+    console.log("Error deleting document: ");
+  }
+
+}
+export {DbCollectionSet,DbCollectionGet,DbCollectionArtGet,DbCollectionSchedGet,DbCollectionSchedSet,DbCollectionSchedDel}

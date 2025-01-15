@@ -2,7 +2,7 @@
 import React, { use } from "react";
 import { useState,useEffect } from "react";
 import { useCall } from "@/app/lib/AuthContext";
-import { DbCollectionSchedGet, DbCollectionSchedSet} from "@/app/(protected)/fireCollection";
+import { DbCollectionSchedGet, DbCollectionSchedSet,DbCollectionSchedDel} from "@/app/(protected)/fireCollection";
 import { useAuth } from "@/app/lib/AuthContext";
 
 
@@ -36,6 +36,12 @@ const WeekSchedule = () => {
     getData()
   };
 
+  const handleEventDelete=(event)=>{
+    setSelectedEvent(null);
+    DbCollectionSchedDel(user,event)
+    getData()
+  };
+
   useEffect(() => {
     fullWeek();
     //getData();
@@ -59,7 +65,7 @@ const WeekSchedule = () => {
       for(let i=0;i<data[0].length;i++){
         data[0][i].id=data[1][i];
       }
-      console.log(data[0])
+      //console.log(data[0])
       setEvents(data[0]); // Przypisz dane do stanu
       setLoading(false); // Ustaw zakończenie ładowania
       
@@ -103,7 +109,7 @@ const WeekSchedule = () => {
       //console.log(day)
       const hour=date.getHours()-8;
 
-      //console.log(hour)
+      //console.log(event)
       tab[day][hour]=event;
       //console.log(event)
       //console.log(tab)
@@ -146,11 +152,11 @@ const WeekSchedule = () => {
                     setSelectedEvent({
                       day,
                       hour,
-                      event: tableVal[day.getDay()+6%7]?.[hour-8] || "",
+                      event: tableVal[((day.getDay()+6)%7)]?.[hour-8] || "",
                     })
                   }
                 >
-                  {tableVal[((day.getDay() + 6) % 7)]?.[hour-8]?.Title || ``}
+                  {tableVal[((day.getDay() + 6) % 7)]?.[hour-8]?.Title || null}
                 </td>
               ))}
             </tr>
@@ -165,14 +171,16 @@ const WeekSchedule = () => {
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
           onSave={handleEventUpdate}
+          onDel={handleEventDelete}
         />
       )}
     </div>
   );
 };
 
-const EventForm = ({ event, onClose, onSave }) => {
-  const [value, setValue] = useState(event.event);
+const EventForm = ({ event, onClose, onSave, onDel}) => {
+  const [value, setValue] = useState(event.event.Content);
+  // console.log(event.event)
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-80">
@@ -189,7 +197,7 @@ const EventForm = ({ event, onClose, onSave }) => {
           <button
             className="bg-red-500 text-white px-4 py-2 rounded"
             onClick={() => {
-              onSave(event.day, event.hour, null); // Usuwanie
+              onDel(event); // Usuwanie
               onClose();
             }}
           >
