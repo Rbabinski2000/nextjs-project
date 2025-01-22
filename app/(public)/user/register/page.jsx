@@ -8,14 +8,15 @@ import { useRouter } from "next/navigation";
 function Register() {
     const { user } = useAuth();
     const router=useRouter();
-    if (user) {
-        return null;
-    }
+    
 
     const [registerError, setRegisterError] = useState(""); // stan błędów rejestracji
     const [showPassword, setShowPassword] = useState(false); // kontrola widoczności hasła
     const [showRepeatPassword, setShowRepeatPassword] = useState(false); // kontrola widoczności powtórzonego hasła
 
+    if (user) {
+        return null;
+    }
     const onSubmit = (data) => {
         data.preventDefault();
         const email = data.target['email'].value;
@@ -23,7 +24,7 @@ function Register() {
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                console.log("User registered!");
+                //console.log("User registered!");
                 sendEmailVerification(auth.currentUser)
                     .then(() => {
                         console.log("Email verification sent!");

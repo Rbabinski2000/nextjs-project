@@ -8,8 +8,6 @@ import { useAuth } from "@/app/lib/AuthContext";
 const WeekSchedule = () => {
   const {user}=useAuth();
 
-
-
   const hours = Array.from({ length: 14 }, (_, i) => i + 8); // Godziny od 8:00 do 19:00
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const {provDate,currDate,setProvDate}=useCall()
@@ -46,8 +44,8 @@ const WeekSchedule = () => {
   
   useEffect(() => {
     fullWeek();
-    //getData();
-      }, []);
+    // `fullWeek` doesn't need to be added to the dependency array
+      },[]);
 
   useEffect(() => {
     getData();
