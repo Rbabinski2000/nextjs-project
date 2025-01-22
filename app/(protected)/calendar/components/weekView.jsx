@@ -5,9 +5,10 @@ import { useCall } from "@/app/lib/AuthContext";
 import { DbCollectionSchedGet, DbCollectionSchedSet,DbCollectionSchedDel} from "@/app/(protected)/fireCollection";
 import { useAuth } from "@/app/lib/AuthContext";
 
-
 const WeekSchedule = () => {
   const {user}=useAuth();
+
+
 
   const hours = Array.from({ length: 14 }, (_, i) => i + 8); // Godziny od 8:00 do 19:00
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -42,6 +43,7 @@ const WeekSchedule = () => {
     getData()
   };
 
+  
   useEffect(() => {
     fullWeek();
     //getData();

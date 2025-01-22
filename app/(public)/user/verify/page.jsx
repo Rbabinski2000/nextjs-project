@@ -24,7 +24,7 @@ export default function VerifyEmail() {
             })
     },[user])
     return ( 
-    <>
+    <div className="mt-24"> 
         <h1>Email not verified. Verify clicking on link in email send to your address {registeredEmail}</h1>
-    </> );
+    </div> );
 }

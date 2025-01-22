@@ -1,9 +1,10 @@
-'use client'
+'use client';
 import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link";
-import { AuthProvider,CalendarProvider } from "./lib/AuthContext";
+import { AuthProvider, CalendarProvider } from "./lib/AuthContext";
 import Navbar from "./lib/navbar";
+import { useState } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,40 +18,57 @@ const geistMono = localFont({
 });
 
 export default function RootLayout({ children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <html lang="en">
       <AuthProvider>
-      <CalendarProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <div className="flex flex-col h-screen">
-            <div className="flex flex-1 h-[100%]">
-              <aside className="w-1/4  p-6 sm:w-60 bg-gray-800 text-gray-100">
+        <CalendarProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            <div className="flex h-screen">
+              {/* Sidebar */}
+              <aside
+                className={`${
+                  sidebarOpen ? "block" : "hidden"
+                } lg:block lg:w-44 bg-gray-800 text-gray-100 flex-0 flex-shrink-0 p-6`}
+              >
                 <nav className="space-y-8 text-sm">
                   <div className="space-y-2">
-                    <h2 className="text-sm font-semibold tracking-widest uppercase dark:text-gray-600">Pages</h2>
+                    <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-400">
+                      Pages
+                    </h2>
                     <div className="flex flex-col space-y-1">
-                      <Link rel="noopener noreferrer" href="/">Home</Link>
-                      <Link rel="noopener noreferrer" href="/user/profile">Profile</Link>
-                      <Link rel="noopener noreferrer" href="/user/articles">Articles</Link>
-                      <Link rel="noopener noreferrer" href="/calendar">Calendar</Link>
+                      <Link rel="noopener noreferrer" href="/">
+                        Home
+                      </Link>
+                      <Link rel="noopener noreferrer" href="/user/profile">
+                        Profile
+                      </Link>
+                      <Link rel="noopener noreferrer" href="/user/articles">
+                        Articles
+                      </Link>
+                      <Link rel="noopener noreferrer" href="/calendar">
+                        Calendar
+                      </Link>
                     </div>
                   </div>
                 </nav>
               </aside>
-              <div className="flex flex-col w-full">
-                <Navbar />
-                {/* Główna zawartość z marginesem */}
-                <div className="flex-1 h-full overflow-y-auto">
-                  {children}
 
-                </div>
+              {/* Content Area */}
+              <div className="flex flex-1 flex-col lg:flex-row w-full">
+                {/* Navbar */}
+                <Navbar />
                 
+                {/* Main Content */}
+                <main className="flex-1 h-full overflow-y-auto p-4">
+                  {children}
+                </main>
               </div>
             </div>
-
-            
-          </div>
-        </body>
+          </body>
         </CalendarProvider>
       </AuthProvider>
     </html>
