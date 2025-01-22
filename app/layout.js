@@ -27,43 +27,69 @@ export default function RootLayout({ children }) {
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
-            <div className="flex h-screen">
-              {/* Sidebar */}
-              <aside
-                className={`${
-                  sidebarOpen ? "block" : "hidden"
-                } lg:block lg:w-44 bg-gray-800 text-gray-100 flex-0 flex-shrink-0 p-6`}
-              >
-                <nav className="space-y-8 text-sm">
-                  <div className="space-y-2">
-                    <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-400">
-                      Pages
-                    </h2>
-                    <div className="flex flex-col space-y-1">
-                      <Link rel="noopener noreferrer" href="/">
-                        Home
-                      </Link>
-                      <Link rel="noopener noreferrer" href="/user/profile">
-                        Profile
-                      </Link>
-                      <Link rel="noopener noreferrer" href="/user/articles">
-                        Articles
-                      </Link>
-                      <Link rel="noopener noreferrer" href="/calendar">
-                        Calendar
-                      </Link>
-                    </div>
-                  </div>
-                </nav>
-              </aside>
+            <div className="flex flex-col h-screen">
+              
 
-              {/* Content Area */}
-              <div className="flex flex-1 flex-col lg:flex-row w-full">
-                {/* Navbar */}
-                <Navbar />
-                
+              {/* Main layout */}
+              <div className="flex flex-1 overflow-hidden">
+                {/* Sidebar */}
+                <aside
+                  className={`${
+                    sidebarOpen ? "w-44" : "w-16"
+                  } bg-gray-800 text-gray-100 flex-shrink-0 transition-all duration-300`}
+                >
+                  {/* Sidebar Content */}
+                  <div className="flex flex-col h-full">
+                    <button
+                      onClick={() => setSidebarOpen(!sidebarOpen)}
+                      className="p-4 text-gray-100 hover:bg-gray-700 focus:outline-none"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M4 6h16M4 12h16M4 18h16"
+                        />
+                      </svg>
+                    </button>
+
+                    {sidebarOpen && (
+                      <nav className="space-y-8 text-sm p-6">
+                        <div className="space-y-2">
+                          <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-400">
+                            Pages
+                          </h2>
+                          <div className="flex flex-col space-y-1">
+                            <Link rel="noopener noreferrer" href="/">
+                              Home
+                            </Link>
+                            <Link rel="noopener noreferrer" href="/user/profile">
+                              Profile
+                            </Link>
+                            <Link rel="noopener noreferrer" href="/user/articles">
+                              Articles
+                            </Link>
+                            <Link rel="noopener noreferrer" href="/calendar">
+                              Calendar
+                            </Link>
+                          </div>
+                        </div>
+                      </nav>
+                    )}
+                  </div>
+                </aside>
+
                 {/* Main Content */}
-                <main className="flex-1 h-full overflow-y-auto p-4">
+                <main className="flex-1 h-full overflow-y-auto p-0">
+                  {/* Navbar */}
+                  <Navbar className="z-50"/>
                   {children}
                 </main>
               </div>
