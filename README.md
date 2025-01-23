@@ -13,3 +13,5 @@ zapis przykładowych danych do serwisów back-end,
 rozkładu tygodniowego zajęć na wybrany tydzień miesiąca roku. 
 
 Link to live app :https://nextjs-project-azure-one.vercel.app/
+
+Projekt autorstwa Radosław Babiński
