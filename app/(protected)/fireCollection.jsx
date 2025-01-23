@@ -83,7 +83,7 @@ async function DbCollectionSchedGet(user,starting,ending){
 
 }
 
-async function DbCollectionSchedSet(user,event,value){
+async function DbCollectionSchedSet(user,event,value,title){
   let temp=new Date(event.day);
   temp.setHours(event.hour);
   temp.setMinutes(0);
@@ -95,7 +95,7 @@ async function DbCollectionSchedSet(user,event,value){
       const userRef=doc(db,"users",user?.uid)
       //console.log(userRef)
       const docRef =addDoc(collection(db, "schedules"), {
-        Title:value,
+        Title:title,
         Content:value,
         user:userRef,
         Date:Timestamp.fromDate(temp)
@@ -110,7 +110,7 @@ async function DbCollectionSchedSet(user,event,value){
       const userRef=doc(db,"users",user?.uid)
       //console.log(userRef)
       const docRef =setDoc(doc(db, "schedules",id), {
-        Title:value,
+        Title:title,
         Content:value,
         user:userRef,
         Date:Timestamp.fromDate(temp)

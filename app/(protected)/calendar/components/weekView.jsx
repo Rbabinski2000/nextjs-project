@@ -22,7 +22,7 @@ const WeekSchedule = () => {
   const[tableVal,setTableVal]=useState([[]])
   //console.log(provDate)
   // Funkcja do zarządzania zajęciami
-  const handleEventUpdate = (day, hour, event,data) => {
+  const handleEventUpdate = (day, hour, data,event,title) => {
     setSchedule((prev) => ({
       ...prev,
       [day]: {
@@ -31,7 +31,7 @@ const WeekSchedule = () => {
       },
     }));
     setSelectedEvent(null);
-    DbCollectionSchedSet(user,data,event)
+    DbCollectionSchedSet(user,data,event,title)
     getData()
   };
 
@@ -180,18 +180,26 @@ const WeekSchedule = () => {
 
 const EventForm = ({ event, onClose, onSave, onDel}) => {
   const [value, setValue] = useState(event.event.Content);
+  const [titValue,setTitValue]=useState(event.event.Title)
   // console.log(event.event)
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-80">
         <h2 className="text-lg font-semibold mb-4">
-          {event.event ? "Edit Event" : "Add Event"} - {event.day.getDay()} {event.hour}:00
+          {event.event ? "Edit Lesson" : "Add Lesson"} - {event.day.getDay()} {event.hour}:00
         </h2>
+        <input
+          type="text"
+          className="w-full p-2 border rounded mb-4"
+          value={titValue}
+          onChange={(e) => setTitValue(e.target.value)}
+          placeholder="Enter lesson Title"
+        />
         <textarea
           className="w-full p-2 border rounded mb-4"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Enter event details"
+          placeholder="Enter lesson details"
         />
         <div className="flex justify-between">
           <button
@@ -214,7 +222,7 @@ const EventForm = ({ event, onClose, onSave, onDel}) => {
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={() => {
                 
-                onSave(event.day, event.hour, value,event); // Zapisanie/edycja
+                onSave(event.day, event.hour,event,value,titValue); // Zapisanie/edycja dzień,godzina, obiekt zbazy,wartość(content), wartość(title)
                 onClose();
               }}
             >
